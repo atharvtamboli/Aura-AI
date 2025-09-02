@@ -1,0 +1,2775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Your Mental Wellness Sanctuary</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins for a softer feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Face-api.js for Emotion Recognition -->
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(ellipse at center, #1a1f2e 0%, #16213e 50%, #0f1419 100%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated particles background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.3;
+        }
+
+        /* Aurora effect */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, 
+                rgba(59, 130, 246, 0.1) 0%, 
+                rgba(139, 92, 246, 0.1) 25%, 
+                rgba(34, 197, 94, 0.1) 50%, 
+                rgba(59, 130, 246, 0.1) 75%, 
+                rgba(236, 72, 153, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 15s ease infinite;
+        }
+
+        @keyframes aurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Enhanced glassmorphism */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-right: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        /* Floating animation */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Enhanced breathing animation */
+        .breathing-circle {
+            position: relative;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 70%, transparent 100%);
+            animation: breathe 8s ease-in-out infinite;
+        }
+        
+        .breathing-circle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: breathe-inner 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: scale(0.8); 
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7), 0 0 0 20px rgba(139, 92, 246, 0.3);
+            }
+            50% { 
+                transform: scale(1.2); 
+                box-shadow: 0 0 50px 30px rgba(59, 130, 246, 0), 0 0 100px 60px rgba(139, 92, 246, 0);
+            }
+        }
+
+        @keyframes breathe-inner {
+            0%, 100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+        }
+
+        /* Page transitions */
+        .page {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Music visualizer */
+        .visualizer-bar {
+            background: linear-gradient(to top, #3b82f6, #8b5cf6, #06d6a0);
+            border-radius: 2px;
+            animation: visualize 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes visualize {
+            0% { height: 10px; }
+            100% { height: 40px; }
+        }
+
+        /* Therapy session styles */
+        .therapy-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .therapy-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Journal entry styles */
+        .journal-entry {
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .journal-entry:hover {
+            border-left-color: #8b5cf6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Sound therapy controls */
+        .sound-control {
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .sound-control.active {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Aurora Background -->
+    <div class="aurora"></div>
+
+    <!-- Music Control Panel -->
+    <div id="music-panel" class="fixed top-4 left-4 glass-card p-3 rounded-xl z-40">
+        <div class="flex items-center space-x-3">
+            <button id="music-toggle" class="w-10 h-10 bg-blue-500/20 hover:bg-blue-500/40 rounded-full flex items-center justify-center transition-all">
+                <i class="fas fa-music text-blue-400"></i>
+            </button>
+            <div id="visualizer" class="flex items-end space-x-1 h-8">
+                <div class="visualizer-bar w-1" style="animation-delay: 0s;"></div>
+                <div class="visualizer-bar w-1" style="animation-delay: 0.1s;"></div>
+                <div class="visualizer-bar w-1" style="animation-delay: 0.2s;"></div>
+                <div class="visualizer-bar w-1" style="animation-delay: 0.3s;"></div>
+                <div class="visualizer-bar w-1" style="animation-delay: 0.4s;"></div>
+            </div>
+            <input type="range" id="volume-slider" min="0" max="100" value="30" class="w-20 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+        </div>
+    </div>
+
+    <!-- Mindfulness Reminder -->
+    <div id="mindfulness-reminder" class="fixed top-4 right-4 glass-card p-4 rounded-xl z-40 transform translate-x-full transition-transform duration-500">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <p class="text-sm text-white">Time for a mindful moment</p>
+            <button id="dismiss-reminder" class="text-gray-400 hover:text-white ml-2">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative min-h-screen flex flex-col md:flex-row">
+
+        <!-- Enhanced Sidebar Navigation -->
+        <nav class="w-full md:w-72 glass-nav p-6 flex-shrink-0">
+            <div class="flex items-center space-x-3 mb-10">
+                <div class="relative">
+                    <i class="fas fa-spa text-3xl text-blue-400"></i>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                </div>
+                <h1 class="text-2xl font-bold text-white">Aura</h1>
+                <span class="text-xs text-gray-400 ml-2">Sanctuary</span>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="#home" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-home w-6 mr-3"></i> Sanctuary</a></li>
+                <li><a href="#resources" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-book-open w-6 mr-3"></i> Wisdom Library</a></li>
+                <li><a href="#mood-tracker" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-heart w-6 mr-3"></i> Emotion Journal</a></li>
+                <li><a href="#breathing-tool" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-wind w-6 mr-3"></i> Breath Work</a></li>
+                <li><a href="#therapy-sessions" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-user-md w-6 mr-3"></i> Therapy Corner</a></li>
+                <li><a href="#sound-therapy" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-music w-6 mr-3"></i> Sound Healing</a></li>
+                <li><a href="#progress" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-chart-line w-6 mr-3"></i> Progress Insights</a></li>
+                <li><a href="#ai-companion" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-robot w-6 mr-3"></i> AI Companion</a></li>
+                <li><a href="#peer-support" class="nav-link flex items-center p-3 rounded-xl text-gray-300 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-300"><i class="fas fa-users w-6 mr-3"></i> Peer Support</a></li>
+
+            </ul>
+            
+            <!-- Wellness Score -->
+            <div class="mt-8 glass-card p-4 rounded-xl">
+                <h3 class="text-sm font-semibold text-gray-300 mb-2">Today's Wellness Score</h3>
+                <div class="flex items-center space-x-3">
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="wellness-score-bar" class="bg-gradient-to-r from-blue-500 to-green-400 h-2 rounded-full transition-all duration-500" style="width: 75%"></div>
+                    </div>
+                    <span id="wellness-score-text" class="text-lg font-bold text-green-400">75%</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+
+            <!-- Home Page -->
+            <section id="home" class="page active">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-green-400 bg-clip-text text-transparent">
+                        Welcome to Your Sanctuary
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                        A sacred space for healing, growth, and inner peace. Begin your journey to wellness.
+                    </p>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <button class="glass-card p-6 rounded-2xl float hover:scale-105 transition-all duration-300 group">
+                        <i class="fas fa-leaf text-3xl text-green-400 mb-3 group-hover:rotate-12 transition-transform"></i>
+                        <h3 class="font-semibold text-white">Quick Meditation</h3>
+                        <p class="text-xs text-gray-400 mt-1">3 min session</p>
+                    </button>
+                    <button class="glass-card p-6 rounded-2xl float hover:scale-105 transition-all duration-300 group">
+                        <i class="fas fa-seedling text-3xl text-blue-400 mb-3 group-hover:rotate-12 transition-transform"></i>
+                        <h3 class="font-semibold text-white">Gratitude Practice</h3>
+                        <p class="text-xs text-gray-400 mt-1">Daily reflection</p>
+                    </button>
+                    <button class="glass-card p-6 rounded-2xl float hover:scale-105 transition-all duration-300 group">
+                        <i class="fas fa-moon text-3xl text-purple-400 mb-3 group-hover:rotate-12 transition-transform"></i>
+                        <h3 class="font-semibold text-white">Sleep Stories</h3>
+                        <p class="text-xs text-gray-400 mt-1">Peaceful tales</p>
+                    </button>
+                    <button class="glass-card p-6 rounded-2xl float hover:scale-105 transition-all duration-300 group">
+                        <i class="fas fa-heart text-3xl text-pink-400 mb-3 group-hover:rotate-12 transition-transform"></i>
+                        <h3 class="font-semibold text-white">Self-Care</h3>
+                        <p class="text-xs text-gray-400 mt-1">Gentle reminders</p>
+                    </button>
+                </div>
+
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-2xl hover:border-blue-400/50 transition-all duration-500 group">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-book-open text-4xl text-blue-400 group-hover:scale-110 transition-transform"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">Wisdom Library</h3>
+                                <p class="text-sm text-blue-300">Curated insights</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 mb-6">Explore evidence-based articles and guides for mental wellness, mindfulness, and personal growth.</p>
+                        <a href="#resources" class="nav-link inline-flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300">
+                            Explore <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl hover:border-green-400/50 transition-all duration-500 group">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-heart text-4xl text-green-400 group-hover:scale-110 transition-transform"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">Emotion Journal</h3>
+                                <p class="text-sm text-green-300">Track & reflect</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 mb-6">Log your daily emotions, discover patterns, and celebrate your journey with intelligent insights.</p>
+                        <a href="#mood-tracker" class="nav-link inline-flex items-center bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300">
+                            Begin <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl hover:border-purple-400/50 transition-all duration-500 group">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-spa text-4xl text-purple-400 group-hover:scale-110 transition-transform"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">Therapy Sessions</h3>
+                                <p class="text-sm text-purple-300">Guided healing</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 mb-6">Access structured therapy exercises, CBT techniques, and personalized wellness plans.</p>
+                        <a href="#therapy-sessions" class="nav-link inline-flex items-center bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300">
+                            Start <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Resources Page -->
+            <section id="resources" class="page">
+                <h2 class="text-4xl font-bold text-white mb-2">Wisdom Library</h2>
+                <p class="text-gray-400 mb-8">Discover evidence-based insights for your wellness journey</p>
+                
+                <div class="flex flex-col md:flex-row gap-4 mb-8">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-input" placeholder="Search for wisdom..." class="w-full bg-gray-800/30 border border-gray-600/50 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50">
+                    </div>
+                    <select id="category-filter" class="bg-gray-800/30 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                        <option value="all">All Wisdom</option>
+                        <option value="Stress">Stress Management</option>
+                        <option value="Anxiety">Anxiety Relief</option>
+                        <option value="Mindfulness">Mindfulness</option>
+                        <option value="Productivity">Mindful Productivity</option>
+                        <option value="Sleep">Sleep & Rest</option>
+                        <option value="Relationships">Relationships</option>
+                    </select>
+                </div>
+                
+                <div id="resource-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Resources will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Enhanced Mood Tracker -->
+            <section id="mood-tracker" class="page">
+                <h2 class="text-4xl font-bold text-white mb-2">Emotion Journal</h2>
+                <p class="text-gray-400 mb-8">Honor your feelings and track your emotional landscape</p>
+
+                <!-- Facial Emotion Recognition Section -->
+                <div class="glass-card p-8 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-semibold text-white mb-6 text-center">Detect Mood from Camera</h3>
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-full max-w-md h-64 bg-gray-900 rounded-lg overflow-hidden mb-4 shadow-lg">
+                            <video id="video" width="100%" height="100%" autoplay muted playsinline class="w-full h-full object-cover" style="transform: scaleX(-1);"></video>
+                            <canvas id="canvas" class="absolute top-0 left-0"></canvas>
+                        </div>
+                        <div id="emotion-result" class="text-lg text-blue-300 font-semibold mb-4 h-6"></div>
+                        <div class="flex space-x-4">
+                            <button id="start-camera-btn" class="bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-8 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 font-semibold">
+                                <i class="fas fa-camera mr-2"></i>Start Camera
+                            </button>
+                            <button id="stop-camera-btn" class="bg-gray-600/50 text-white py-3 px-8 rounded-xl hover:bg-gray-600 transition-all duration-300 font-semibold" disabled>
+                                <i class="fas fa-stop mr-2"></i>Stop Camera
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mood Selection with enhanced UX -->
+                <div class="glass-card p-8 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-semibold text-white mb-6 text-center">How does your heart feel today?</h3>
+                    <div class="flex justify-around items-center mb-6">
+                        <div class="text-center">
+                            <button class="mood-btn text-6xl hover:scale-125 transition-all duration-300 mb-2" data-mood="Radiant" data-color="emerald">
+                                <i class="fas fa-sun text-emerald-400"></i>
+                            </button>
+                            <p class="text-xs text-gray-400">Radiant</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="mood-btn text-6xl hover:scale-125 transition-all duration-300 mb-2" data-mood="Peaceful" data-color="green">
+                                <i class="fas fa-smile text-green-400"></i>
+                            </button>
+                            <p class="text-xs text-gray-400">Peaceful</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="mood-btn text-6xl hover:scale-125 transition-all duration-300 mb-2" data-mood="Neutral" data-color="yellow">
+                                <i class="fas fa-meh text-yellow-400"></i>
+                            </button>
+                            <p class="text-xs text-gray-400">Neutral</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="mood-btn text-6xl hover:scale-125 transition-all duration-300 mb-2" data-mood="Troubled" data-color="orange">
+                                <i class="fas fa-cloud-rain text-orange-400"></i>
+                            </button>
+                            <p class="text-xs text-gray-400">Troubled</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="mood-btn text-6xl hover:scale-125 transition-all duration-300 mb-2" data-mood="Heavy" data-color="red">
+                                <i class="fas fa-heart-broken text-red-400"></i>
+                            </button>
+                            <p class="text-xs text-gray-400">Heavy</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced journal input -->
+                    <div class="space-y-4">
+                        <textarea id="mood-note" rows="4" placeholder="What's flowing through your mind and heart today? Let your thoughts flow freely..." class="w-full bg-gray-800/30 border border-gray-600/50 rounded-xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 resize-none"></textarea>
+                        
+                        <!-- Gratitude section -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="gratitude-1" placeholder="I'm grateful for..." class="bg-gray-800/30 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500/50">
+                            <input type="text" id="gratitude-2" placeholder="Something that brought me joy..." class="bg-gray-800/30 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500/50">
+                        </div>
+                        
+                        <button id="save-mood-btn" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold" disabled>
+                            <i class="fas fa-heart mr-2"></i>Save This Moment
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Mood History -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Emotional Journey</h3>
+                        <div id="mood-calendar" class="glass-card p-6 rounded-2xl">
+                            <!-- Calendar will be dynamically inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Recent Reflections</h3>
+                        <div id="recent-entries" class="space-y-4 max-h-96 overflow-y-auto">
+                            <!-- Recent entries will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Enhanced Breathing Tool -->
+            <section id="breathing-tool" class="page">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <h2 class="text-4xl font-bold text-white mb-4">Sacred Breath Work</h2>
+                    <p class="text-lg text-gray-300 mb-8 max-w-md">Connect with your inner rhythm. Let each breath guide you home to yourself.</p>
+                    
+                    <!-- Breathing Pattern Selection -->
+                    <div class="flex space-x-4 mb-8">
+                        <button class="breathing-pattern-btn glass-card px-4 py-2 rounded-xl text-sm hover:bg-blue-500/20 transition-all" data-pattern="4-4-4">
+                            Box Breathing
+                        </button>
+                        <button class="breathing-pattern-btn glass-card px-4 py-2 rounded-xl text-sm hover:bg-blue-500/20 transition-all" data-pattern="4-7-8">
+                            Relaxing Breath
+                        </button>
+                        <button class="breathing-pattern-btn glass-card px-4 py-2 rounded-xl text-sm hover:bg-blue-500/20 transition-all" data-pattern="6-2-6">
+                            Calming Flow
+                        </button>
+                    </div>
+                    
+                    <div class="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center mb-8">
+                        <div class="breathing-circle w-full h-full rounded-full"></div>
+                        <div class="absolute text-center">
+                            <p id="breathing-text" class="text-3xl font-light text-white mb-2"></p>
+                            <p id="breathing-count" class="text-lg text-blue-300"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button id="start-breathing" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-8 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-semibold">
+                            <i class="fas fa-play mr-2"></i>Begin Session
+                        </button>
+                        <button id="stop-breathing" class="bg-gray-600/50 text-white py-3 px-8 rounded-xl hover:bg-gray-600 transition-all duration-300 font-semibold" disabled>
+                            <i class="fas fa-stop mr-2"></i>End Session
+                            </button>
+                   </div>
+               </div>
+           </section>
+
+           <!-- Therapy Sessions -->
+           <section id="therapy-sessions" class="page">
+               <h2 class="text-4xl font-bold text-white mb-2">Therapy Corner</h2>
+               <p class="text-gray-400 mb-8">Structured healing sessions and therapeutic exercises</p>
+               
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-brain text-blue-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">CBT Toolkit</h3>
+                       <p class="text-gray-300 mb-4">Cognitive Behavioral Therapy techniques for managing negative thought patterns.</p>
+                       <button class="w-full bg-blue-500/20 text-blue-300 py-2 px-4 rounded-lg hover:bg-blue-500/30 transition-all">Start Session</button>
+                   </div>
+                   
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-leaf text-green-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">Mindfulness Training</h3>
+                       <p class="text-gray-300 mb-4">Guided mindfulness exercises to increase present-moment awareness.</p>
+                       <button class="w-full bg-green-500/20 text-green-300 py-2 px-4 rounded-lg hover:bg-green-500/30 transition-all">Begin Practice</button>
+                   </div>
+                   
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-heart text-purple-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">Emotional Regulation</h3>
+                       <p class="text-gray-300 mb-4">Learn healthy ways to process and manage difficult emotions.</p>
+                       <button class="w-full bg-purple-500/20 text-purple-300 py-2 px-4 rounded-lg hover:bg-purple-500/30 transition-all">Explore Tools</button>
+                   </div>
+                   
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-users text-pink-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">Relationship Skills</h3>
+                       <p class="text-gray-300 mb-4">Build healthier connections and communication patterns.</p>
+                       <button class="w-full bg-pink-500/20 text-pink-300 py-2 px-4 rounded-lg hover:bg-pink-500/30 transition-all">Learn More</button>
+                   </div>
+                   
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-sun text-yellow-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">Depression Support</h3>
+                       <p class="text-gray-300 mb-4">Evidence-based strategies for managing depression symptoms.</p>
+                       <button class="w-full bg-yellow-500/20 text-yellow-300 py-2 px-4 rounded-lg hover:bg-yellow-500/30 transition-all">Get Support</button>
+                   </div>
+                   
+                   <div class="therapy-card glass-card p-6 rounded-2xl">
+                       <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-4">
+                           <i class="fas fa-shield-alt text-indigo-400 text-xl"></i>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2">Anxiety Management</h3>
+                       <p class="text-gray-300 mb-4">Tools and techniques to reduce anxiety and build resilience.</p>
+                       <button class="w-full bg-indigo-500/20 text-indigo-300 py-2 px-4 rounded-lg hover:bg-indigo-500/30 transition-all">Start Journey</button>
+                   </div>
+               </div>
+           </section>
+
+           <section id="ai-companion" class="page">
+    <div class="flex flex-col h-[calc(100vh-8rem)]">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-2">AI Wellness Companion</h2>
+                <p class="text-gray-400">Your 24/7 supportive AI guide for mental wellness</p>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="text-sm text-green-400">AI Online</span>
+            </div>
+        </div>
+        
+        <!-- Chat Container -->
+        <div class="flex-1 glass-card rounded-2xl p-6 flex flex-col">
+            <!-- Chat Header -->
+            <div class="flex items-center space-x-3 mb-4 pb-4 border-b border-gray-600/30">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-robot text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white">Aura AI</h3>
+                    <p class="text-xs text-gray-400">Wellness Companion</p>
+                </div>
+                <div class="ml-auto flex space-x-2">
+                    <button id="ai-mood-context" class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs hover:bg-blue-500/30 transition-all">
+                        Share Mood Context
+                    </button>
+                    <button id="clear-ai-chat" class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-xs hover:bg-red-500/30 transition-all">
+                        Clear Chat
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto space-y-4 mb-4">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                        <p class="text-gray-200">Hello! I'm Aura, your AI wellness companion. I'm here to listen, support, and guide you on your mental health journey. How are you feeling today?</p>
+                        <span class="text-xs text-gray-400 mt-1 block">Just now</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Response Buttons -->
+            <div id="ai-quick-responses" class="flex flex-wrap gap-2 mb-4">
+                <button class="ai-quick-btn px-3 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm hover:bg-blue-500/30 transition-all">
+                    I'm feeling anxious
+                </button>
+                <button class="ai-quick-btn px-3 py-2 bg-green-500/20 text-green-300 rounded-full text-sm hover:bg-green-500/30 transition-all">
+                    I'm doing well
+                </button>
+                <button class="ai-quick-btn px-3 py-2 bg-yellow-500/20 text-yellow-300 rounded-full text-sm hover:bg-yellow-500/30 transition-all">
+                    I need support
+                </button>
+                <button class="ai-quick-btn px-3 py-2 bg-purple-500/20 text-purple-300 rounded-full text-sm hover:bg-purple-500/30 transition-all">
+                    Help with breathing
+                </button>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="flex space-x-3">
+                <div class="flex-1 relative">
+                    <textarea 
+                        id="ai-chat-input" 
+                        placeholder="Share what's on your mind..." 
+                        rows="2"
+                        class="w-full bg-gray-800/30 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 resize-none"
+                    ></textarea>
+                    <button id="ai-voice-input" class="absolute right-3 top-3 text-gray-400 hover:text-blue-400 transition-colors">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <button 
+                    id="send-ai-message" 
+                    class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled
+                >
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Peer Support Section -->
+<section id="peer-support" class="page">
+    <div class="flex flex-col h-[calc(100vh-8rem)]">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-2">Anonymous Peer Support</h2>
+                <p class="text-gray-400">Connect with others on similar wellness journeys</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span class="text-sm text-gray-400"><span id="online-peers">12</span> online</span>
+                </div>
+                <button id="join-support-room" class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all">
+                    <i class="fas fa-plus mr-2"></i>Join Room
+                </button>
+            </div>
+        </div>
+        
+        <!-- Support Room Tabs -->
+        <div class="flex space-x-4 mb-6 overflow-x-auto">
+            <button class="support-room-tab px-4 py-2 bg-blue-500/30 text-blue-300 rounded-lg whitespace-nowrap border border-blue-500/50" data-room="general">
+                General Support
+            </button>
+            <button class="support-room-tab px-4 py-2 bg-gray-600/30 text-gray-300 rounded-lg whitespace-nowrap hover:bg-gray-600/50" data-room="anxiety">
+                Anxiety Support
+            </button>
+            <button class="support-room-tab px-4 py-2 bg-gray-600/30 text-gray-300 rounded-lg whitespace-nowrap hover:bg-gray-600/50" data-room="depression">
+                Depression Support
+            </button>
+            <button class="support-room-tab px-4 py-2 bg-gray-600/30 text-gray-300 rounded-lg whitespace-nowrap hover:bg-gray-600/50" data-room="meditation">
+                Meditation Circle
+            </button>
+        </div>
+        
+        <div class="flex-1 flex gap-6">
+            <!-- Chat Area -->
+            <div class="flex-1 glass-card rounded-2xl p-6 flex flex-col">
+                <!-- Room Header -->
+                <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-600/30">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white" id="current-room-name">General Support</h3>
+                            <p class="text-xs text-gray-400">Safe space for sharing and support</p>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-400">
+                        <span id="room-member-count">8</span> members
+                    </div>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div id="peer-chat-messages" class="flex-1 overflow-y-auto space-y-4 mb-4">
+                    <!-- Sample messages -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm font-bold">A</span>
+                        </div>
+                        <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                            <p class="text-gray-200">Thank you all for the support yesterday. I tried the breathing exercise and it really helped with my anxiety attack.</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-400">Anonymous Butterfly • 2m ago</span>
+                                <div class="flex space-x-2">
+                                    <button class="text-xs text-gray-400 hover:text-red-400 transition-colors">
+                                        <i class="fas fa-heart"></i> 3
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm font-bold">W</span>
+                        </div>
+                        <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                            <p class="text-gray-200">That's wonderful to hear! Small steps make a big difference. You've got this! 💙</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-400">Wise Owl • 1m ago</span>
+                                <button class="text-xs text-gray-400 hover:text-red-400 transition-colors">
+                                    <i class="fas fa-heart"></i> 1
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="flex space-x-3">
+                    <div class="flex-1 relative">
+                        <textarea 
+                            id="peer-chat-input" 
+                            placeholder="Share your thoughts with the community..." 
+                            rows="2"
+                            class="w-full bg-gray-800/30 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 resize-none"
+                        ></textarea>
+                        <div class="absolute right-3 top-3 flex space-x-2">
+                            <button id="peer-emoji-picker" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                                <i class="fas fa-smile"></i>
+                            </button>
+                            <button id="peer-guidelines" class="text-gray-400 hover:text-blue-400 transition-colors">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button 
+                        id="send-peer-message" 
+                        class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50"
+                        disabled
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Side Panel -->
+            <div class="w-80 space-y-4">
+                <!-- Community Guidelines -->
+                <div class="glass-card p-4 rounded-2xl">
+                    <h4 class="text-lg font-semibold text-white mb-3 flex items-center">
+                        <i class="fas fa-shield-heart text-green-400 mr-2"></i>
+                        Safe Space Guidelines
+                    </h4>
+                    <ul class="text-sm text-gray-300 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mt-0.5 mr-2 text-xs"></i>
+                            Be kind and respectful to all members
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mt-0.5 mr-2 text-xs"></i>
+                            Share your experiences, not advice
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mt-0.5 mr-2 text-xs"></i>
+                            Maintain anonymity and privacy
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-400 mt-0.5 mr-2 text-xs"></i>
+                            No medical advice or crisis situations
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Crisis Resources -->
+                <div class="glass-card p-4 rounded-2xl border border-red-500/30">
+                    <h4 class="text-lg font-semibold text-white mb-3 flex items-center">
+                        <i class="fas fa-phone text-red-400 mr-2"></i>
+                        Crisis Support
+                    </h4>
+                    <div class="text-sm text-gray-300 space-y-2">
+                        <p>If you're in crisis, please reach out:</p>
+                        <div class="bg-red-500/10 p-3 rounded-lg">
+                            <p class="text-red-300 font-semibold">National Suicide Prevention Lifeline</p>
+                            <p class="text-white">988 or 1-800-273-8255</p>
+                        </div>
+                        <div class="bg-blue-500/10 p-3 rounded-lg">
+                            <p class="text-blue-300 font-semibold">Crisis Text Line</p>
+                            <p class="text-white">Text HOME to 741741</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Online Members -->
+                <div class="glass-card p-4 rounded-2xl">
+                    <h4 class="text-lg font-semibold text-white mb-3">Online Now</h4>
+                    <div class="space-y-2" id="online-members">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                                <span class="text-xs text-white font-bold">A</span>
+                            </div>
+                            <span class="text-sm text-gray-300">Anonymous Butterfly</span>
+                            <div class="w-2 h-2 bg-green-400 rounded-full ml-auto"></div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                <span class="text-xs text-white font-bold">W</span>
+                            </div>
+                            <span class="text-sm text-gray-300">Wise Owl</span>
+                            <div class="w-2 h-2 bg-green-400 rounded-full ml-auto"></div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="text-xs text-white font-bold">S</span>
+                            </div>
+                            <span class="text-sm text-gray-300">Serene Star</span>
+                            <div class="w-2 h-2 bg-green-400 rounded-full ml-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+           <!-- Sound Therapy -->
+           <section id="sound-therapy" class="page">
+               <h2 class="text-4xl font-bold text-white mb-2">Sound Healing</h2>
+               <p class="text-gray-400 mb-8">Immerse yourself in therapeutic soundscapes</p>
+               
+               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="rain">
+                       <i class="fas fa-cloud-rain text-3xl text-blue-400 mb-2"></i>
+                       <p class="text-sm text-white">Rain</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="forest">
+                       <i class="fas fa-tree text-3xl text-green-400 mb-2"></i>
+                       <p class="text-sm text-white">Forest</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="ocean">
+                       <i class="fas fa-water text-3xl text-cyan-400 mb-2"></i>
+                       <p class="text-sm text-white">Ocean</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="fire">
+                       <i class="fas fa-fire text-3xl text-orange-400 mb-2"></i>
+                       <p class="text-sm text-white">Fire</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="birds">
+                       <i class="fas fa-dove text-3xl text-yellow-400 mb-2"></i>
+                       <p class="text-sm text-white">Birds</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="wind">
+                       <i class="fas fa-wind text-3xl text-purple-400 mb-2"></i>
+                       <p class="text-sm text-white">Wind</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="bells">
+                       <i class="fas fa-bell text-3xl text-pink-400 mb-2"></i>
+                       <p class="text-sm text-white">Bells</p>
+                   </button>
+                   <button class="sound-control p-6 rounded-2xl text-center" data-sound="white">
+                       <i class="fas fa-volume-up text-3xl text-gray-400 mb-2"></i>
+                       <p class="text-sm text-white">White Noise</p>
+                   </button>
+               </div>
+               
+               <div class="glass-card p-6 rounded-2xl">
+                   <h3 class="text-xl font-semibold text-white mb-4">Sound Mix Controls</h3>
+                   <div class="space-y-4">
+                       <div class="flex items-center space-x-4">
+                           <span class="text-sm text-gray-300 w-20">Volume</span>
+                           <input type="range" id="master-volume" min="0" max="100" value="50" class="flex-1">
+                           <span class="text-sm text-gray-300 w-8" id="volume-display">50</span>
+                       </div>
+                       <div class="flex items-center space-x-4">
+                           <span class="text-sm text-gray-300 w-20">Timer</span>
+                           <select id="sound-timer" class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-white">
+                               <option value="0">Continuous</option>
+                               <option value="5">5 minutes</option>
+                               <option value="10">10 minutes</option>
+                               <option value="15">15 minutes</option>
+                               <option value="30">30 minutes</option>
+                               <option value="60">1 hour</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+           </section>
+
+           <!-- Progress Dashboard -->
+           <section id="progress" class="page">
+               <h2 class="text-4xl font-bold text-white mb-2">Progress Insights</h2>
+               <p class="text-gray-400 mb-8">Track your wellness journey and celebrate growth</p>
+               
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                   <div class="glass-card p-6 rounded-2xl text-center">
+                       <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <i class="fas fa-calendar-check text-2xl text-blue-400"></i>
+                       </div>
+                       <h3 class="text-2xl font-bold text-white" id="streak-count">7</h3>
+                       <p class="text-sm text-gray-300">Day Streak</p>
+                   </div>
+                   
+                   <div class="glass-card p-6 rounded-2xl text-center">
+                       <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <i class="fas fa-meditation text-2xl text-green-400"></i>
+                       </div>
+                       <h3 class="text-2xl font-bold text-white" id="meditation-minutes">245</h3>
+                       <p class="text-sm text-gray-300">Minutes Meditated</p>
+                   </div>
+                   
+                   <div class="glass-card p-6 rounded-2xl text-center">
+                       <div class="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <i class="fas fa-heart text-2xl text-purple-400"></i>
+                       </div>
+                       <h3 class="text-2xl font-bold text-white" id="mood-entries">28</h3>
+                       <p class="text-sm text-gray-300">Mood Entries</p>
+                   </div>
+                   
+                   <div class="glass-card p-6 rounded-2xl text-center">
+                       <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <i class="fas fa-trophy text-2xl text-yellow-400"></i>
+                       </div>
+                       <h3 class="text-2xl font-bold text-white" id="achievements">12</h3>
+                       <p class="text-sm text-gray-300">Achievements</p>
+                   </div>
+               </div>
+               
+               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                   <div class="glass-card p-6 rounded-2xl">
+                       <h3 class="text-xl font-semibold text-white mb-4">Weekly Mood Trends</h3>
+                       <div class="h-64 flex items-end justify-around space-x-2">
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-blue-500 to-blue-300 w-8 rounded-t" style="height: 60%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Mon</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-green-500 to-green-300 w-8 rounded-t" style="height: 80%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Tue</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-yellow-500 to-yellow-300 w-8 rounded-t" style="height: 40%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Wed</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-green-500 to-green-300 w-8 rounded-t" style="height: 75%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Thu</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-blue-500 to-blue-300 w-8 rounded-t" style="height: 65%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Fri</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-purple-500 to-purple-300 w-8 rounded-t" style="height: 90%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Sat</span>
+                           </div>
+                           <div class="flex flex-col items-center">
+                               <div class="bg-gradient-to-t from-emerald-500 to-emerald-300 w-8 rounded-t" style="height: 85%"></div>
+                               <span class="text-xs text-gray-400 mt-2">Sun</span>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <div class="glass-card p-6 rounded-2xl">
+                       <h3 class="text-xl font-semibold text-white mb-4">Recent Achievements</h3>
+                       <div class="space-y-4">
+                           <div class="flex items-center space-x-3 p-3 bg-blue-500/10 rounded-lg">
+                               <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                   <i class="fas fa-fire text-blue-400"></i>
+                               </div>
+                               <div>
+                                   <p class="text-white font-semibold">7 Day Streak!</p>
+                                   <p class="text-xs text-gray-400">Consistent daily check-ins</p>
+                               </div>
+                           </div>
+                           
+                           <div class="flex items-center space-x-3 p-3 bg-green-500/10 rounded-lg">
+                               <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                                   <i class="fas fa-leaf text-green-400"></i>
+                               </div>
+                               <div>
+                                   <p class="text-white font-semibold">Mindful Warrior</p>
+                                   <p class="text-xs text-gray-400">100 minutes of meditation</p>
+                               </div>
+                           </div>
+                           
+                           <div class="flex items-center space-x-3 p-3 bg-purple-500/10 rounded-lg">
+                               <div class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                                   <i class="fas fa-heart text-purple-400"></i>
+                               </div>
+                               <div>
+                                   <p class="text-white font-semibold">Emotional Explorer</p>
+                                   <p class="text-xs text-gray-400">30 mood journal entries</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </section>
+
+       </main>
+   </div>
+
+   <!-- Audio elements -->
+   <audio id="background-music" loop>
+       <source src="data:audio/mp3;base64," type="audio/mpeg">
+   </audio>
+
+   <script>
+       // App State
+       let currentPage = 'home';
+       let moodEntries = JSON.parse(localStorage.getItem('moodEntries')) || [];
+       let resources = [
+           { title: "Managing Daily Stress", category: "Stress", description: "Learn practical techniques to handle everyday stressors with grace.", readTime: "5 min", difficulty: "Beginner" },
+           { title: "Anxiety Relief Techniques", category: "Anxiety", description: "Evidence-based methods to calm your mind and body during anxious moments.", readTime: "7 min", difficulty: "Intermediate" },
+           { title: "Mindful Breathing Basics", category: "Mindfulness", description: "Master the foundation of mindfulness through conscious breathing.", readTime: "4 min", difficulty: "Beginner" },
+           { title: "Sleep Hygiene Essentials", category: "Sleep", description: "Create the perfect environment and routine for restorative sleep.", readTime: "6 min", difficulty: "Beginner" },
+           { title: "Building Resilient Relationships", category: "Relationships", description: "Strengthen your connections through mindful communication.", readTime: "8 min", difficulty: "Advanced" },
+           { title: "Productivity with Purpose", category: "Productivity", description: "Align your daily actions with your deeper values and goals.", readTime: "10 min", difficulty: "Intermediate" }
+       ];
+       
+       let breathingInterval;
+       let breathingPattern = { inhale: 4, hold: 4, exhale: 4 };
+       let isBreathing = false;
+       let breathingPhase = 'inhale';
+       let breathingCount = 0;
+       
+       let soundTimers = {};
+       let activeSounds = new Set();
+
+       // Initialize App
+       document.addEventListener('DOMContentLoaded', function() {
+           initializeParticles();
+           setupNavigation();
+           setupMoodTracker();
+           setupBreathingTool();
+           setupSoundTherapy();
+           loadResources();
+           setupMindfulnessReminder();
+           updateWellnessScore();
+       });
+
+       // Particle System
+       function initializeParticles() {
+           const canvas = document.getElementById('particle-canvas');
+           const ctx = canvas.getContext('2d');
+           canvas.width = window.innerWidth;
+           canvas.height = window.innerHeight;
+           
+           const particles = [];
+           const particleCount = 50;
+           
+           for (let i = 0; i < particleCount; i++) {
+               particles.push({
+                   x: Math.random() * canvas.width,
+                   y: Math.random() * canvas.height,
+                   dx: (Math.random() - 0.5) * 0.5,
+                   dy: (Math.random() - 0.5) * 0.5,
+                   size: Math.random() * 2 + 1,
+                   opacity: Math.random() * 0.5 + 0.2
+               });
+           }
+           
+           function animateParticles() {
+               ctx.clearRect(0, 0, canvas.width, canvas.height);
+               
+               particles.forEach(particle => {
+                   particle.x += particle.dx;
+                   particle.y += particle.dy;
+                   
+                   if (particle.x < 0 || particle.x > canvas.width) particle.dx *= -1;
+                   if (particle.y < 0 || particle.y > canvas.height) particle.dy *= -1;
+                   
+                   ctx.beginPath();
+                   ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                   ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+                   ctx.fill();
+               });
+               
+               requestAnimationFrame(animateParticles);
+           }
+           
+           animateParticles();
+           
+           window.addEventListener('resize', () => {
+               canvas.width = window.innerWidth;
+               canvas.height = window.innerHeight;
+           });
+       }
+
+       // Navigation System
+       function setupNavigation() {
+           const navLinks = document.querySelectorAll('.nav-link');
+           const pages = document.querySelectorAll('.page');
+           
+           navLinks.forEach(link => {
+               link.addEventListener('click', (e) => {
+                   e.preventDefault();
+                   const targetPage = link.getAttribute('href').substring(1);
+                   showPage(targetPage);
+               });
+           });
+       }
+       
+       function showPage(pageId) {
+           const pages = document.querySelectorAll('.page');
+           const navLinks = document.querySelectorAll('.nav-link');
+           
+           pages.forEach(page => {
+               page.classList.remove('active');
+           });
+           
+           navLinks.forEach(link => {
+               link.classList.remove('bg-blue-500/30', 'text-blue-300');
+           });
+           
+           document.getElementById(pageId).classList.add('active');
+           document.querySelector(`[href="#${pageId}"]`).classList.add('bg-blue-500/30', 'text-blue-300');
+           currentPage = pageId;
+       }
+
+       // Mood Tracker System
+       function setupMoodTracker() {
+           const moodButtons = document.querySelectorAll('.mood-btn');
+           const saveMoodBtn = document.getElementById('save-mood-btn');
+           const moodNote = document.getElementById('mood-note');
+           let selectedMood = null;
+           
+           moodButtons.forEach(btn => {
+               btn.addEventListener('click', () => {
+                   moodButtons.forEach(b => b.classList.remove('ring-4', 'ring-blue-400'));
+                   btn.classList.add('ring-4', 'ring-blue-400');
+                   selectedMood = {
+                       mood: btn.dataset.mood,
+                       color: btn.dataset.color
+                   };
+                   updateSaveMoodButton();
+               });
+           });
+           
+           [moodNote, document.getElementById('gratitude-1'), document.getElementById('gratitude-2')].forEach(input => {
+               input.addEventListener('input', updateSaveMoodButton);
+           });
+           
+           saveMoodBtn.addEventListener('click', saveMoodEntry);
+           
+           function updateSaveMoodButton() {
+               const hasContent = selectedMood || moodNote.value.trim();
+               saveMoodBtn.disabled = !hasContent;
+               saveMoodBtn.classList.toggle('opacity-50', !hasContent);
+               saveMoodBtn.classList.toggle('cursor-not-allowed', !hasContent);
+           }
+           
+           function saveMoodEntry() {
+               if (!selectedMood && !moodNote.value.trim()) return;
+               
+               const entry = {
+                   id: Date.now(),
+                   date: new Date().toISOString(),
+                   mood: selectedMood?.mood || 'Neutral',
+                   color: selectedMood?.color || 'gray',
+                   note: moodNote.value.trim(),
+                   gratitude: [
+                       document.getElementById('gratitude-1').value.trim(),
+                       document.getElementById('gratitude-2').value.trim()
+                   ].filter(g => g)
+               };
+               
+               moodEntries.unshift(entry);
+               localStorage.setItem('moodEntries', JSON.stringify(moodEntries));
+               
+               // Reset form
+               moodButtons.forEach(b => b.classList.remove('ring-4', 'ring-blue-400'));
+               moodNote.value = '';
+               document.getElementById('gratitude-1').value = '';
+               document.getElementById('gratitude-2').value = '';
+               selectedMood = null;
+               updateSaveMoodButton();
+               
+               // Show success animation
+               saveMoodBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
+               setTimeout(() => {
+                   saveMoodBtn.innerHTML = '<i class="fas fa-heart mr-2"></i>Save This Moment';
+               }, 2000);
+               
+               displayRecentEntries();
+               updateWellnessScore();
+           }
+           
+           displayRecentEntries();
+       }
+       
+       function displayRecentEntries() {
+           const container = document.getElementById('recent-entries');
+           const recent = moodEntries.slice(0, 5);
+           
+           container.innerHTML = recent.map(entry => `
+               <div class="journal-entry glass-card p-4 rounded-xl">
+                   <div class="flex items-center justify-between mb-2">
+                       <div class="flex items-center space-x-2">
+                           <div class="w-3 h-3 bg-${entry.color}-400 rounded-full"></div>
+                           <span class="text-${entry.color}-400 font-semibold">${entry.mood}</span>
+                       </div>
+                       <span class="text-xs text-gray-400">${new Date(entry.date).toLocaleDateString()}</span>
+                   </div>
+                   ${entry.note ? `<p class="text-gray-300 text-sm mb-2">${entry.note}</p>` : ''}
+                   ${entry.gratitude.length > 0 ? `
+                       <div class="flex flex-wrap gap-2">
+                           ${entry.gratitude.map(g => `<span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">${g}</span>`).join('')}
+                       </div>
+                   ` : ''}
+               </div>
+           `).join('');
+       }
+
+       // Breathing Tool
+       function setupBreathingTool() {
+           const startBtn = document.getElementById('start-breathing');
+           const stopBtn = document.getElementById('stop-breathing');
+           const patternBtns = document.querySelectorAll('.breathing-pattern-btn');
+           
+           patternBtns.forEach(btn => {
+               btn.addEventListener('click', () => {
+                   patternBtns.forEach(b => b.classList.remove('bg-blue-500/30'));
+                   btn.classList.add('bg-blue-500/30');
+                   
+                   const pattern = btn.dataset.pattern.split('-').map(Number);
+                   breathingPattern = { inhale: pattern[0], hold: pattern[1] || 0, exhale: pattern[2] };
+               });
+           });
+           
+           startBtn.addEventListener('click', startBreathing);
+           stopBtn.addEventListener('click', stopBreathing);
+       }
+       
+       function startBreathing() {
+           if (isBreathing) return;
+           
+           isBreathing = true;
+           breathingPhase = 'inhale';
+           breathingCount = breathingPattern.inhale;
+           
+           document.getElementById('start-breathing').disabled = true;
+           document.getElementById('stop-breathing').disabled = false;
+           
+           updateBreathingDisplay();
+           breathingInterval = setInterval(updateBreathing, 1000);
+       }
+       
+       function stopBreathing() {
+           isBreathing = false;
+           clearInterval(breathingInterval);
+           
+           document.getElementById('start-breathing').disabled = false;
+           document.getElementById('stop-breathing').disabled = true;
+           
+           document.getElementById('breathing-text').textContent = 'Ready to begin';
+           document.getElementById('breathing-count').textContent = '';
+       }
+       
+       function updateBreathing() {
+           breathingCount--;
+           
+           if (breathingCount <= 0) {
+               switch (breathingPhase) {
+                   case 'inhale':
+                       breathingPhase = 'hold';
+                       breathingCount = breathingPattern.hold;
+                       if (breathingCount === 0) {
+                           breathingPhase = 'exhale';
+                           breathingCount = breathingPattern.exhale;
+                       }
+                       break;
+                   case 'hold':
+                       breathingPhase = 'exhale';
+                       breathingCount = breathingPattern.exhale;
+                       break;
+                   case 'exhale':
+                       breathingPhase = 'inhale';
+                       breathingCount = breathingPattern.inhale;
+                       break;
+               }
+           }
+           
+           updateBreathingDisplay();
+       }
+       
+       function updateBreathingDisplay() {
+           const textElement = document.getElementById('breathing-text');
+           const countElement = document.getElementById('breathing-count');
+           
+           const phaseText = {
+               'inhale': 'Breathe In',
+               'hold': 'Hold',
+               'exhale': 'Breathe Out'
+           };
+           
+           textElement.textContent = phaseText[breathingPhase];
+           countElement.textContent = breathingCount;
+       }
+
+       // Sound Therapy
+       function setupSoundTherapy() {
+           const soundControls = document.querySelectorAll('.sound-control');
+           const masterVolume = document.getElementById('master-volume');
+           const volumeDisplay = document.getElementById('volume-display');
+           const soundTimer = document.getElementById('sound-timer');
+           
+           soundControls.forEach(control => {
+               control.addEventListener('click', () => {
+                   const soundType = control.dataset.sound;
+                   toggleSound(soundType, control);
+               });
+           });
+           
+           masterVolume.addEventListener('input', (e) => {
+               volumeDisplay.textContent = e.target.value;
+               // Update all active sound volumes
+           });
+           
+           soundTimer.addEventListener('change', (e) => {
+               const minutes = parseInt(e.target.value);
+               if (minutes > 0) {
+                   setTimeout(() => {
+                       stopAllSounds();
+                   }, minutes * 60000);
+               }
+           });
+       }
+       
+       function toggleSound(soundType, control) {
+           if (activeSounds.has(soundType)) {
+               // Stop sound
+               activeSounds.delete(soundType);
+               control.classList.remove('active');
+               if (soundTimers[soundType]) {
+                   clearTimeout(soundTimers[soundType]);
+                   delete soundTimers[soundType];
+                   }
+           } else {
+               // Start sound
+               activeSounds.add(soundType);
+               control.classList.add('active');
+               // Note: Actual audio playback would require audio files
+               simulateAudioPlayback(soundType);
+           }
+       }
+       
+       function simulateAudioPlayback(soundType) {
+           console.log(`Playing ${soundType} sound`);
+           // In a real implementation, you would play actual audio files here
+       }
+       
+       function stopAllSounds() {
+           activeSounds.clear();
+           document.querySelectorAll('.sound-control').forEach(control => {
+               control.classList.remove('active');
+           });
+           Object.values(soundTimers).forEach(timer => clearTimeout(timer));
+           soundTimers = {};
+       }
+
+       // Resources System
+       function loadResources() {
+           const resourceGrid = document.getElementById('resource-grid');
+           const searchInput = document.getElementById('search-input');
+           const categoryFilter = document.getElementById('category-filter');
+           
+           function displayResources(resourcesToShow = resources) {
+               resourceGrid.innerHTML = resourcesToShow.map(resource => `
+                   <div class="glass-card p-6 rounded-2xl hover:border-blue-400/50 transition-all duration-500 group cursor-pointer">
+                       <div class="flex items-center justify-between mb-3">
+                           <span class="text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full">${resource.category}</span>
+                           <span class="text-xs text-gray-400">${resource.readTime}</span>
+                       </div>
+                       <h3 class="text-xl font-semibold text-white mb-2 group-hover:text-blue-300 transition-colors">${resource.title}</h3>
+                       <p class="text-gray-300 text-sm mb-4">${resource.description}</p>
+                       <div class="flex items-center justify-between">
+                           <span class="text-xs text-gray-400">Difficulty: ${resource.difficulty}</span>
+                           <button class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-lg hover:bg-blue-500/30 transition-all text-sm">
+                               <i class="fas fa-arrow-right mr-1"></i>Read
+                           </button>
+                       </div>
+                   </div>
+               `).join('');
+           }
+           
+           function filterResources() {
+               const searchTerm = searchInput.value.toLowerCase();
+               const selectedCategory = categoryFilter.value;
+               
+               const filtered = resources.filter(resource => {
+                   const matchesSearch = resource.title.toLowerCase().includes(searchTerm) || 
+                                       resource.description.toLowerCase().includes(searchTerm);
+                   const matchesCategory = selectedCategory === 'all' || resource.category === selectedCategory;
+                   return matchesSearch && matchesCategory;
+               });
+               
+               displayResources(filtered);
+           }
+           
+           searchInput.addEventListener('input', filterResources);
+           categoryFilter.addEventListener('change', filterResources);
+           
+           displayResources();
+       }
+
+       // Mindfulness Reminder System
+       function setupMindfulnessReminder() {
+           const reminder = document.getElementById('mindfulness-reminder');
+           const dismissBtn = document.getElementById('dismiss-reminder');
+           
+           // Show reminder every 30 minutes
+           function showReminder() {
+               reminder.classList.remove('translate-x-full');
+               setTimeout(() => {
+                   reminder.classList.add('translate-x-full');
+               }, 10000); // Auto-hide after 10 seconds
+           }
+           
+           dismissBtn.addEventListener('click', () => {
+               reminder.classList.add('translate-x-full');
+           });
+           
+           // Schedule reminders
+           setInterval(showReminder, 30 * 60 * 1000); // Every 30 minutes
+           
+           // Show first reminder after 5 minutes
+           setTimeout(showReminder, 5 * 60 * 1000);
+       }
+
+       // Music Control System
+       function setupMusicControls() {
+           const musicToggle = document.getElementById('music-toggle');
+           const volumeSlider = document.getElementById('volume-slider');
+           const visualizer = document.getElementById('visualizer');
+           let musicPlaying = false;
+           
+           musicToggle.addEventListener('click', () => {
+               musicPlaying = !musicPlaying;
+               if (musicPlaying) {
+                   musicToggle.innerHTML = '<i class="fas fa-pause text-blue-400"></i>';
+                   startVisualizer();
+               } else {
+                   musicToggle.innerHTML = '<i class="fas fa-music text-blue-400"></i>';
+                   stopVisualizer();
+               }
+           });
+           
+           volumeSlider.addEventListener('input', (e) => {
+               // Adjust background music volume
+               console.log('Volume set to:', e.target.value);
+           });
+           
+           function startVisualizer() {
+               const bars = visualizer.querySelectorAll('.visualizer-bar');
+               bars.forEach(bar => {
+                   bar.style.animationPlayState = 'running';
+               });
+           }
+           
+           function stopVisualizer() {
+               const bars = visualizer.querySelectorAll('.visualizer-bar');
+               bars.forEach(bar => {
+                   bar.style.animationPlayState = 'paused';
+               });
+           }
+       }
+
+       // Wellness Score Calculator
+       function updateWellnessScore() {
+           const recentEntries = moodEntries.slice(0, 7); // Last 7 days
+           if (recentEntries.length === 0) return;
+           
+           const moodValues = {
+               'Radiant': 5,
+               'Peaceful': 4,
+               'Neutral': 3,
+               'Troubled': 2,
+               'Heavy': 1
+           };
+           
+           const totalScore = recentEntries.reduce((sum, entry) => {
+               return sum + (moodValues[entry.mood] || 3);
+           }, 0);
+           
+           const avgScore = totalScore / recentEntries.length;
+           const wellnessPercentage = Math.round((avgScore / 5) * 100);
+           
+           const scoreBar = document.getElementById('wellness-score-bar');
+           const scoreText = document.getElementById('wellness-score-text');
+           
+           if (scoreBar && scoreText) {
+               scoreBar.style.width = `${wellnessPercentage}%`;
+               scoreText.textContent = `${wellnessPercentage}%`;
+               
+               // Update color based on score
+               const colorClass = wellnessPercentage >= 80 ? 'from-emerald-500 to-green-400' :
+                                wellnessPercentage >= 60 ? 'from-yellow-500 to-orange-400' :
+                                'from-red-500 to-red-400';
+               
+               scoreBar.className = `bg-gradient-to-r ${colorClass} h-2 rounded-full transition-all duration-500`;
+           }
+       }
+
+       // Quick Actions from Home Page
+       function setupQuickActions() {
+           const quickActionBtns = document.querySelectorAll('.glass-card button');
+           
+           quickActionBtns.forEach((btn, index) => {
+               btn.addEventListener('click', () => {
+                   switch(index) {
+                       case 0: // Quick Meditation
+                           showPage('breathing-tool');
+                           setTimeout(() => {
+                               document.getElementById('start-breathing').click();
+                           }, 500);
+                           break;
+                       case 1: // Gratitude Practice
+                           showPage('mood-tracker');
+                           setTimeout(() => {
+                               document.getElementById('gratitude-1').focus();
+                           }, 500);
+                           break;
+                       case 2: // Sleep Stories
+                           showPage('sound-therapy');
+                           break;
+                       case 3: // Self-Care
+                           showPage('resources');
+                           break;
+                   }
+               });
+           });
+       }
+
+       // Progress Stats Animation
+       function animateProgressStats() {
+           const statElements = [
+               { id: 'streak-count', target: 7, suffix: '' },
+               { id: 'meditation-minutes', target: 245, suffix: '' },
+               { id: 'mood-entries', target: moodEntries.length, suffix: '' },
+               { id: 'achievements', target: 12, suffix: '' }
+           ];
+           
+           statElements.forEach(stat => {
+               const element = document.getElementById(stat.id);
+               if (element) {
+                   animateCounter(element, 0, stat.target, 2000);
+               }
+           });
+       }
+       
+       function animateCounter(element, start, end, duration) {
+           const range = end - start;
+           const increment = range / (duration / 16);
+           let current = start;
+           
+           const timer = setInterval(() => {
+               current += increment;
+               if (current >= end) {
+                   current = end;
+                   clearInterval(timer);
+               }
+               element.textContent = Math.floor(current);
+           }, 16);
+       }
+
+       // Therapy Session Modal System
+       function setupTherapySessions() {
+           const therapyCards = document.querySelectorAll('.therapy-card button');
+           
+           therapyCards.forEach((btn, index) => {
+               btn.addEventListener('click', () => {
+                   const sessions = [
+                       'CBT Toolkit',
+                       'Mindfulness Training', 
+                       'Emotional Regulation',
+                       'Relationship Skills',
+                       'Depression Support',
+                       'Anxiety Management'
+                   ];
+                   
+                   showTherapyModal(sessions[index]);
+               });
+           });
+       }
+       
+       function showTherapyModal(sessionType) {
+           // Create modal overlay
+           const modal = document.createElement('div');
+           modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+           modal.innerHTML = `
+               <div class="glass-card p-8 rounded-2xl max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                   <div class="flex items-center justify-between mb-6">
+                       <h3 class="text-2xl font-bold text-white">${sessionType}</h3>
+                       <button id="close-modal" class="text-gray-400 hover:text-white">
+                           <i class="fas fa-times text-xl"></i>
+                       </button>
+                   </div>
+                   <div class="space-y-4">
+                       <p class="text-gray-300">This is a guided ${sessionType.toLowerCase()} session. Take your time and be gentle with yourself throughout this process.</p>
+                       <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+                           <h4 class="text-lg font-semibold text-blue-300 mb-2">Session Overview</h4>
+                           <ul class="text-sm text-gray-300 space-y-1">
+                               <li>• Duration: 15-20 minutes</li>
+                               <li>• Level: Beginner-friendly</li>
+                               <li>• Tools: Journal and pen recommended</li>
+                           </ul>
+                       </div>
+                       <div class="flex space-x-4">
+                           <button class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all">
+                               Start Session
+                           </button>
+                           <button id="close-modal-btn" class="px-6 py-3 bg-gray-600/50 text-white rounded-xl hover:bg-gray-600 transition-all">
+                               Maybe Later
+                           </button>
+                       </div>
+                   </div>
+               </div>
+           `;
+           
+           document.body.appendChild(modal);
+           
+           // Close modal functionality
+           modal.querySelector('#close-modal').addEventListener('click', () => {
+               modal.remove();
+           });
+           modal.querySelector('#close-modal-btn').addEventListener('click', () => {
+               modal.remove();
+           });
+           modal.addEventListener('click', (e) => {
+               if (e.target === modal) modal.remove();
+           });
+       }
+
+       // Enhanced Calendar for Mood Tracker
+       function generateMoodCalendar() {
+           const calendarContainer = document.getElementById('mood-calendar');
+           if (!calendarContainer) return;
+           
+           const today = new Date();
+           const currentMonth = today.getMonth();
+           const currentYear = today.getFullYear();
+           const firstDay = new Date(currentYear, currentMonth, 1);
+           const lastDay = new Date(currentYear, currentMonth + 1, 0);
+           const daysInMonth = lastDay.getDate();
+           const startingDayOfWeek = firstDay.getDay();
+           
+           const monthNames = ["January", "February", "March", "April", "May", "June",
+               "July", "August", "September", "October", "November", "December"];
+           
+           let calendarHTML = `
+               <div class="text-center mb-4">
+                   <h4 class="text-lg font-semibold text-white">${monthNames[currentMonth]} ${currentYear}</h4>
+               </div>
+               <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                   <div class="text-xs text-gray-400 py-2">Sun</div>
+                   <div class="text-xs text-gray-400 py-2">Mon</div>
+                   <div class="text-xs text-gray-400 py-2">Tue</div>
+                   <div class="text-xs text-gray-400 py-2">Wed</div>
+                   <div class="text-xs text-gray-400 py-2">Thu</div>
+                   <div class="text-xs text-gray-400 py-2">Fri</div>
+                   <div class="text-xs text-gray-400 py-2">Sat</div>
+               </div>
+               <div class="grid grid-cols-7 gap-1">
+           `;
+           
+           // Empty cells for days before month starts
+           for (let i = 0; i < startingDayOfWeek; i++) {
+               calendarHTML += '<div class="py-2"></div>';
+           }
+           
+           // Days of the month
+           for (let day = 1; day <= daysInMonth; day++) {
+               const date = new Date(currentYear, currentMonth, day);
+               const dateString = date.toISOString().split('T')[0];
+               const entry = moodEntries.find(e => e.date.split('T')[0] === dateString);
+               const isToday = day === today.getDate();
+               
+               const moodColor = entry ? getMoodColor(entry.mood) : 'gray-600';
+               const todayClass = isToday ? 'ring-2 ring-blue-400' : '';
+               
+               calendarHTML += `
+                   <div class="relative">
+                       <div class="w-8 h-8 bg-${moodColor}/30 rounded-lg flex items-center justify-center text-xs text-white hover:bg-${moodColor}/50 transition-all cursor-pointer ${todayClass}">
+                           ${day}
+                       </div>
+                       ${entry ? '<div class="absolute -top-1 -right-1 w-2 h-2 bg-' + moodColor + ' rounded-full"></div>' : ''}
+                   </div>
+               `;
+           }
+           
+           calendarHTML += '</div>';
+           calendarContainer.innerHTML = calendarHTML;
+       }
+       
+       function getMoodColor(mood) {
+           const colors = {
+               'Radiant': 'emerald-400',
+               'Peaceful': 'green-400',
+               'Neutral': 'yellow-400',
+               'Troubled': 'orange-400',
+               'Heavy': 'red-400'
+           };
+           return colors[mood] || 'gray-400';
+       }
+
+       // Initialize all systems when page loads
+       function initializeApp() {
+           setupNavigation();
+           setupMoodTracker();
+           setupBreathingTool();
+           setupSoundTherapy();
+           setupMusicControls();
+           setupQuickActions();
+           setupTherapySessions();
+           loadResources();
+           setupMindfulnessReminder();
+           updateWellnessScore();
+           generateMoodCalendar();
+           
+           // Animate progress stats when visiting progress page
+           document.querySelector('[href="#progress"]').addEventListener('click', () => {
+               setTimeout(animateProgressStats, 600);
+           });
+       }
+
+       // Enhanced interaction effects
+       function addInteractionEffects() {
+           // Add ripple effect to buttons
+           document.addEventListener('click', (e) => {
+               if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                   const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+                   const ripple = document.createElement('div');
+                   const rect = button.getBoundingClientRect();
+                   const size = Math.max(rect.width, rect.height);
+                   const x = e.clientX - rect.left - size / 2;
+                   const y = e.clientY - rect.top - size / 2;
+                   
+                   ripple.style.cssText = `
+                       position: absolute;
+                       width: ${size}px;
+                       height: ${size}px;
+                       left: ${x}px;
+                       top: ${y}px;
+                       background: rgba(59, 130, 246, 0.3);
+                       border-radius: 50%;
+                       transform: scale(0);
+                       animation: ripple 0.6s ease-out;
+                       pointer-events: none;
+                   `;
+                   
+                   if (getComputedStyle(button).position === 'static') {
+                       button.style.position = 'relative';
+                   }
+                   
+                   button.appendChild(ripple);
+                   
+                   setTimeout(() => {
+                       ripple.remove();
+                   }, 600);
+               }
+           });
+           
+           // Add ripple animation
+           const style = document.createElement('style');
+           style.textContent = `
+               @keyframes ripple {
+                   to {
+                       transform: scale(2);
+                       opacity: 0;
+                   }
+               }
+           `;
+           document.head.appendChild(style);
+       }
+
+       // Breathing exercise enhancements
+       function enhanceBreathingExercise() {
+           // Add breathing sound effects (simulated)
+           function playBreathingSound(phase) {
+               console.log(`Playing ${phase} sound`);
+               // In real implementation, play actual breathing guide sounds
+           }
+           
+           // Modify the existing breathing update function to include sounds
+           const originalUpdateBreathing = updateBreathing;
+           updateBreathing = function() {
+               const prevPhase = breathingPhase;
+               originalUpdateBreathing.call(this);
+               
+               if (prevPhase !== breathingPhase) {
+                   playBreathingSound(breathingPhase);
+               }
+           };
+       }
+
+       // Notification system for achievements
+       function showAchievement(title, description, icon = 'trophy') {
+           const notification = document.createElement('div');
+           notification.className = 'fixed top-20 right-4 glass-card p-4 rounded-xl z-50 transform translate-x-full transition-transform duration-500';
+           notification.innerHTML = `
+               <div class="flex items-center space-x-3">
+                   <div class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                       <i class="fas fa-${icon} text-yellow-400"></i>
+                   </div>
+                   <div>
+                       <p class="text-white font-semibold">${title}</p>
+                       <p class="text-xs text-gray-400">${description}</p>
+                   </div>
+                   <button class="text-gray-400 hover:text-white ml-4" onclick="this.parentElement.parentElement.remove()">
+                       <i class="fas fa-times"></i>
+                   </button>
+               </div>
+           `;
+           
+           document.body.appendChild(notification);
+           
+           setTimeout(() => {
+               notification.classList.remove('translate-x-full');
+           }, 100);
+           
+           setTimeout(() => {
+               notification.classList.add('translate-x-full');
+               setTimeout(() => notification.remove(), 500);
+           }, 5000);
+       }
+
+       // Check for achievements
+       function checkAchievements() {
+           const streakCount = calculateStreak();
+           const totalEntries = moodEntries.length;
+           
+           // Streak achievements
+           if (streakCount === 7 && !hasAchievement('week-streak')) {
+               showAchievement('Week Warrior!', 'You\'ve maintained a 7-day wellness streak');
+               saveAchievement('week-streak');
+           }
+           
+           // Entry count achievements
+           if (totalEntries === 10 && !hasAchievement('ten-entries')) {
+               showAchievement('Consistent Creator', 'You\'ve made 10 journal entries');
+               saveAchievement('ten-entries');
+           }
+       }
+       
+       function calculateStreak() {
+           if (moodEntries.length === 0) return 0;
+           
+           const today = new Date();
+           let streak = 0;
+           let currentDate = new Date(today);
+           
+           for (let i = 0; i < moodEntries.length; i++) {
+               const entryDate = new Date(moodEntries[i].date);
+               const entryDateString = entryDate.toDateString();
+               const currentDateString = currentDate.toDateString();
+               
+               if (entryDateString === currentDateString) {
+                   streak++;
+                   currentDate.setDate(currentDate.getDate() - 1);
+               } else {
+                   break;
+               }
+           }
+           
+           return streak;
+       }
+       
+       function hasAchievement(achievementId) {
+           const achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+           return achievements.includes(achievementId);
+       }
+       
+       function saveAchievement(achievementId) {
+           const achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+           achievements.push(achievementId);
+           localStorage.setItem('achievements', JSON.stringify(achievements));
+       }
+
+       // Initialize everything when DOM is loaded
+       document.addEventListener('DOMContentLoaded', function() {
+           initializeParticles();
+           initializeApp();
+           addInteractionEffects();
+           enhanceBreathingExercise();
+           
+           // Generate calendar when mood tracker is opened
+           document.querySelector('[href="#mood-tracker"]').addEventListener('click', () => {
+               setTimeout(generateMoodCalendar, 100);
+           });
+           
+           // Check achievements periodically
+           setInterval(checkAchievements, 30000); // Every 30 seconds
+       });
+
+       // Handle page refresh and maintain state
+       window.addEventListener('beforeunload', () => {
+           localStorage.setItem('currentPage', currentPage);
+       });
+       
+       window.addEventListener('load', () => {
+           const savedPage = localStorage.getItem('currentPage');
+           if (savedPage && savedPage !== 'home') {
+               showPage(savedPage);
+           }
+       });
+
+   </script>
+   <script>
+// AI Chatbot System
+class AICompanion {
+    constructor() {
+        this.messages = [];
+        this.isTyping = false;
+        this.responses = {
+            greeting: [
+                "Hello! I'm here to listen and support you. How are you feeling today?",
+                "Hi there! It's good to see you. What's on your mind?",
+                "Welcome back! I'm glad you're taking time for your wellness today."
+            ],
+            anxiety: [
+                "I understand you're feeling anxious. That's completely valid. Let's try some grounding techniques together. Can you name 5 things you can see right now?",
+                "Anxiety can feel overwhelming, but remember that you're safe in this moment. Would you like to try a breathing exercise?",
+                "Thank you for sharing that with me. Anxiety is tough, but you're taking a positive step by reaching out."
+            ],
+            support: [
+                "I'm here for you, and you're not alone in this journey. What specific support would be most helpful right now?",
+                "It takes courage to ask for support. I'm glad you're here. Let's work through this together.",
+                "You deserve support and care. What's been weighing on your mind lately?"
+            ],
+            wellbeing: [
+                "That's wonderful to hear! I'm glad you're doing well. What's been contributing to your positive mood?",
+                "It's great that you're feeling good! Celebrating these moments is important for your overall wellness."
+            ],
+            breathing: [
+                "Breathing exercises can be very helpful. I can guide you through a simple technique. Would you like to start with box breathing (4-4-4-4 pattern)?",
+                "Let's focus on your breath together. Find a comfortable position and we'll go through a calming breathing exercise."
+            ]
+        };
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.loadChatHistory();
+    }
+
+    setupEventListeners() {
+        const chatInput = document.getElementById('ai-chat-input');
+        const sendButton = document.getElementById('send-ai-message');
+        const quickButtons = document.querySelectorAll('.ai-quick-btn');
+        const clearButton = document.getElementById('clear-ai-chat');
+        const moodContextButton = document.getElementById('ai-mood-context');
+
+        chatInput.addEventListener('input', () => {
+            sendButton.disabled = !chatInput.value.trim();
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
+            }
+        });
+
+        sendButton.addEventListener('click', () => this.sendMessage());
+        clearButton.addEventListener('click', () => this.clearChat());
+        moodContextButton.addEventListener('click', () => this.shareMoodContext());
+
+        quickButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                chatInput.value = btn.textContent;
+                this.sendMessage();
+            });
+        });
+    }
+
+    sendMessage() {
+        const input = document.getElementById('ai-chat-input');
+        const message = input.value.trim();
+        if (!message) return;
+
+        this.addMessage('user', message);
+        input.value = '';
+        document.getElementById('send-ai-message').disabled = true;
+
+        // Simulate AI typing
+        this.showTypingIndicator();
+        setTimeout(() => {
+            this.generateAIResponse(message);
+        }, Math.random() * 2000 + 1000);
+    }
+
+    addMessage(sender, content, timestamp = new Date()) {
+        const messagesContainer = document.getElementById('ai-chat-messages');
+        const messageDiv = document.createElement('div');
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3 justify-end">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs lg:max-w-md">
+                        <p class="text-white">${content}</p>
+                        <span class="text-xs text-blue-200 mt-1 block">${this.formatTime(timestamp)}</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                        <p class="text-gray-200">${content}</p>
+                        <span class="text-xs text-gray-400 mt-1 block">${this.formatTime(timestamp)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Save to messages array
+        this.messages.push({ sender, content, timestamp });
+        this.saveChatHistory();
+    }
+
+    showTypingIndicator() {
+        const messagesContainer = document.getElementById('ai-chat-messages');
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-sm"></i>
+                </div>
+                <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    generateAIResponse(userMessage) {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) typingIndicator.remove();
+
+        const message = userMessage.toLowerCase();
+        let response;
+
+        // Simple keyword matching for demonstration
+        if (message.includes('anxious') || message.includes('anxiety') || message.includes('worried')) {
+            response = this.getRandomResponse('anxiety');
+        } else if (message.includes('support') || message.includes('help') || message.includes('struggling')) {
+            response = this.getRandomResponse('support');
+        } else if (message.includes('good') || message.includes('well') || message.includes('better')) {
+            response = this.getRandomResponse('wellbeing');
+        } else if (message.includes('breathing') || message.includes('breath')) {
+            response = this.getRandomResponse('breathing');
+        } else if (message.includes('hello') || message.includes('hi')) {
+            response = this.getRandomResponse('greeting');
+        } else {
+            // Contextual response based on recent mood entries
+            response = this.generateContextualResponse(userMessage);
+        }
+
+        this.addMessage('ai', response);
+    }
+
+    generateContextualResponse(message) {
+        const recentMood = moodEntries.length > 0 ? moodEntries[0] : null;
+        
+        if (recentMood) {
+            if (recentMood.mood === 'Heavy' || recentMood.mood === 'Troubled') {
+                return "I can see from your recent mood entries that things have been challenging. Thank you for sharing with me. Remember that difficult feelings are temporary, and you're taking positive steps by using this app.";
+            } else if (recentMood.mood === 'Radiant' || recentMood.mood === 'Peaceful') {
+                return "I noticed you've been feeling more positive lately - that's wonderful! What do you think has been contributing to these good feelings?";
+            }
+        }
+
+        return "Thank you for sharing that with me. I'm here to listen and support you. Is there something specific you'd like to talk about or work through together?";
+    }
+
+    getRandomResponse(category) {
+        const responses = this.responses[category];
+        return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    shareMoodContext() {
+        if (moodEntries.length === 0) {
+            this.addMessage('ai', "I don't see any recent mood entries to provide context. Feel free to share how you're feeling, and I'll do my best to support you!");
+            return;
+        }
+
+        const recentEntry = moodEntries[0];
+        const contextMessage = `Based on your recent mood entry (${recentEntry.mood}), I can see you've been experiencing ${recentEntry.mood.toLowerCase()} feelings. ${recentEntry.note ? 'You mentioned: "' + recentEntry.note + '"' : ''} How can I best support you today?`;
+
+        this.addMessage('ai', contextMessage);
+    }
+
+    clearChat() {
+        document.getElementById('ai-chat-messages').innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-sm"></i>
+                </div>
+                <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                    <p class="text-gray-200">Hello! I'm Aura, your AI wellness companion. I'm here to listen, support, and guide you on your mental health journey. How are you feeling today?</p>
+                    <span class="text-xs text-gray-400 mt-1 block">Just now</span>
+                </div>
+            </div>
+        `;
+        this.messages = [];
+        localStorage.removeItem('aiChatHistory');
+    }
+
+    formatTime(date) {
+        return date.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
+    }
+
+    saveChatHistory() {
+        localStorage.setItem('aiChatHistory', JSON.stringify(this.messages));
+    }
+
+    loadChatHistory() {
+        const saved = localStorage.getItem('aiChatHistory');
+        if (saved) {
+            this.messages = JSON.parse(saved);
+            // Optionally restore chat display
+        }
+    }
+}
+// Continuation of Peer Support System
+class PeerSupport {
+    constructor() {
+        this.currentRoom = 'general';
+        this.userNickname = this.generateNickname();
+        this.userAvatar = this.generateAvatar();
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.simulateRoomActivity();
+    }
+
+    setupEventListeners() {
+        const chatInput = document.getElementById('peer-chat-input');
+        const sendButton = document.getElementById('send-peer-message');
+        const roomTabs = document.querySelectorAll('.support-room-tab');
+
+        chatInput.addEventListener('input', () => {
+            sendButton.disabled = !chatInput.value.trim();
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendPeerMessage();
+            }
+        });
+
+        sendButton.addEventListener('click', () => this.sendPeerMessage());
+
+        roomTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                this.switchRoom(tab.dataset.room);
+            });
+        });
+
+        document.getElementById('join-support-room').addEventListener('click', () => {
+            this.showJoinModal();
+        });
+    }
+
+    sendPeerMessage() {
+        const input = document.getElementById('peer-chat-input');
+        const message = input.value.trim();
+        if (!message) return;
+
+        this.addPeerMessage('user', message, this.userNickname);
+        input.value = '';
+        document.getElementById('send-peer-message').disabled = true;
+
+        // Simulate peer responses
+        setTimeout(() => {
+            this.simulatePeerResponse(message);
+        }, Math.random() * 3000 + 2000);
+    }
+
+    addPeerMessage(sender, content, nickname = null, timestamp = new Date()) {
+        const messagesContainer = document.getElementById('peer-chat-messages');
+        const messageDiv = document.createElement('div');
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3 justify-end">
+                    <div class="bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs lg:max-w-md">
+                        <p class="text-white">${content}</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs text-green-200">${nickname} • ${this.formatTime(timestamp)}</span>
+                            <button class="text-xs text-green-200 hover:text-red-300 transition-colors">
+                                <i class="fas fa-heart"></i> 0
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 ${this.userAvatar} rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm font-bold">${nickname.charAt(0)}</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            const avatar = this.generateRandomAvatar();
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 ${avatar} rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm font-bold">${nickname.charAt(0)}</span>
+                    </div>
+                    <div class="bg-gray-700/50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs lg:max-w-md">
+                        <p class="text-gray-200">${content}</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs text-gray-400">${nickname} • ${this.formatTime(timestamp)}</span>
+                            <button class="text-xs text-gray-400 hover:text-red-400 transition-colors like-btn">
+                                <i class="fas fa-heart"></i> ${Math.floor(Math.random() * 5)}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Add like functionality
+        const likeBtn = messageDiv.querySelector('.like-btn');
+        if (likeBtn) {
+            likeBtn.addEventListener('click', (e) => {
+                const currentLikes = parseInt(e.target.textContent.split(' ')[1]) || 0;
+                e.target.innerHTML = `<i class="fas fa-heart"></i> ${currentLikes + 1}`;
+                e.target.classList.add('text-red-400');
+            });
+        }
+    }
+
+    simulatePeerResponse(userMessage) {
+        const supportiveResponses = [
+            "Thank you for sharing that. You're not alone in feeling this way. 💙",
+            "I can relate to what you're going through. Sending you positive thoughts.",
+            "That takes courage to share. We're here to support each other.",
+            "I've been there too. One day at a time, friend.",
+            "Your feelings are valid. Thank you for trusting us with this.",
+            "Wishing you peace and strength. This community is here for you.",
+            "I hear you. Sometimes just knowing others understand can help.",
+            "You're taking a positive step by reaching out. Proud of you.",
+            "Sending virtual hugs your way. We've got your back.",
+            "I appreciate your vulnerability. It helps others feel less alone too."
+        ];
+
+        const nickname = this.generateRandomNickname();
+        const response = supportiveResponses[Math.floor(Math.random() * supportiveResponses.length)];
+        
+        this.addPeerMessage('peer', response, nickname);
+    }
+
+    switchRoom(roomName) {
+        // Update active tab
+        document.querySelectorAll('.support-room-tab').forEach(tab => {
+            tab.classList.remove('bg-blue-500/30', 'text-blue-300', 'border-blue-500/50');
+            tab.classList.add('bg-gray-600/30', 'text-gray-300');
+        });
+
+        const activeTab = document.querySelector(`[data-room="${roomName}"]`);
+        activeTab.classList.remove('bg-gray-600/30', 'text-gray-300');
+        activeTab.classList.add('bg-blue-500/30', 'text-blue-300', 'border-blue-500/50');
+
+        // Update room info
+        const roomNames = {
+            general: 'General Support',
+            anxiety: 'Anxiety Support',
+            depression: 'Depression Support',
+            meditation: 'Meditation Circle'
+        };
+
+        document.getElementById('current-room-name').textContent = roomNames[roomName];
+        document.getElementById('room-member-count').textContent = Math.floor(Math.random() * 15) + 3;
+
+        // Clear and load room-specific messages
+        this.loadRoomMessages(roomName);
+        this.currentRoom = roomName;
+    }
+
+    loadRoomMessages(roomName) {
+        const messagesContainer = document.getElementById('peer-chat-messages');
+        messagesContainer.innerHTML = '';
+
+        // Add sample messages based on room type
+        const roomMessages = this.getRoomMessages(roomName);
+        roomMessages.forEach(msg => {
+            this.addPeerMessage('peer', msg.content, msg.nickname, new Date(Date.now() - msg.age));
+        });
+    }
+
+    getRoomMessages(roomName) {
+        const messageTemplates = {
+            general: [
+                { content: "Welcome everyone! This is a safe space to share and support each other.", nickname: "Community Guide", age: 300000 },
+                { content: "Had a breakthrough in therapy today. Feeling grateful for this journey.", nickname: "Hopeful Heart", age: 120000 },
+                { content: "Thank you all for the support yesterday. I tried the breathing exercise and it really helped with my anxiety attack.", nickname: "Anonymous Butterfly", age: 60000 }
+            ],
+            anxiety: [
+                { content: "The 5-4-3-2-1 grounding technique really helps me during panic attacks.", nickname: "Calm Warrior", age: 180000 },
+                { content: "Does anyone else feel anxious about social situations? Looking for coping strategies.", nickname: "Quiet Voice", age: 90000 },
+                { content: "Remember: anxiety lies to us. You are stronger than your fears.", nickname: "Brave Soul", age: 45000 }
+            ],
+            depression: [
+                { content: "Small wins today: got out of bed, took a shower, and I'm here. That's enough.", nickname: "Rising Phoenix", age: 240000 },
+                { content: "Some days are harder than others, but we keep going. You matter.", nickname: "Gentle Spirit", age: 150000 },
+                { content: "Reminder: healing isn't linear. Be patient with yourself.", nickname: "Wise Traveler", age: 75000 }
+            ],
+            meditation: [
+                { content: "Just finished a 10-minute mindfulness session. Feeling more centered.", nickname: "Peaceful Mind", age: 200000 },
+                { content: "Daily meditation has been life-changing. Even 5 minutes makes a difference.", nickname: "Zen Seeker", age: 120000 },
+                { content: "Loving-kindness meditation helped me forgive myself today.", nickname: "Compassionate Heart", age: 80000 }
+            ]
+        };
+
+        return messageTemplates[roomName] || messageTemplates.general;
+    }
+
+    showJoinModal() {
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="glass-card p-6 rounded-2xl max-w-md w-full mx-4">
+                <h3 class="text-xl font-bold text-white mb-4">Join Peer Support</h3>
+                <p class="text-gray-300 mb-4">Choose your anonymous identity for this session:</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Nickname</label>
+                        <input type="text" id="modal-nickname" value="${this.userNickname}" class="w-full bg-gray-800/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Avatar Color</label>
+                        <div class="flex space-x-2">
+                            <button class="w-8 h-8 bg-purple-500 rounded-full border-2 border-transparent hover:border-white" data-avatar="bg-gradient-to-br from-purple-500 to-pink-600"></button>
+                            <button class="w-8 h-8 bg-blue-500 rounded-full border-2 border-transparent hover:border-white" data-avatar="bg-gradient-to-br from-blue-500 to-cyan-600"></button>
+                            <button class="w-8 h-8 bg-green-500 rounded-full border-2 border-transparent hover:border-white" data-avatar="bg-gradient-to-br from-green-500 to-emerald-600"></button>
+                            <button class="w-8 h-8 bg-orange-500 rounded-full border-2 border-transparent hover:border-white" data-avatar="bg-gradient-to-br from-orange-500 to-red-600"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3 mt-6">
+                    <button id="cancel-join" class="flex-1 bg-gray-600/50 text-gray-300 py-2 rounded-lg hover:bg-gray-600/70 transition-all">
+                        Cancel
+                    </button>
+                    <button id="confirm-join" class="flex-1 bg-gradient-to-r from-green-500 to-blue-600 text-white py-2 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all">
+                        Join Chat
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Modal event listeners
+        document.getElementById('cancel-join').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+
+        document.getElementById('confirm-join').addEventListener('click', () => {
+            const newNickname = document.getElementById('modal-nickname').value.trim();
+            if (newNickname) {
+                this.userNickname = newNickname;
+            }
+            document.body.removeChild(modal);
+        });
+
+        // Avatar selection
+        modal.querySelectorAll('[data-avatar]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.querySelectorAll('[data-avatar]').forEach(b => b.classList.remove('border-white'));
+                btn.classList.add('border-white');
+                this.userAvatar = btn.dataset.avatar;
+            });
+        });
+    }
+
+    simulateRoomActivity() {
+        // Periodically add new messages from other users
+        setInterval(() => {
+            if (Math.random() > 0.7) { // 30% chance every interval
+                this.addRandomPeerMessage();
+            }
+        }, 15000); // Every 15 seconds
+
+        // Update online count
+        setInterval(() => {
+            const count = Math.floor(Math.random() * 20) + 5;
+            document.getElementById('online-peers').textContent = count;
+            document.getElementById('room-member-count').textContent = Math.floor(count * 0.6);
+        }, 30000); // Every 30 seconds
+    }
+
+    addRandomPeerMessage() {
+        const messages = [
+            "Just wanted to share some positivity with everyone today ✨",
+            "The meditation session really helped me center myself",
+            "Grateful for this supportive community",
+            "Remember to be gentle with yourselves today",
+            "Taking things one breath at a time",
+            "You are all stronger than you know",
+            "Sending love and light to everyone here 💙",
+            "Progress isn't always linear, and that's okay",
+            "Proud of everyone for showing up today"
+        ];
+
+        const nickname = this.generateRandomNickname();
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        
+        this.addPeerMessage('peer', message, nickname);
+    }
+
+    generateNickname() {
+        const adjectives = ['Peaceful', 'Brave', 'Gentle', 'Wise', 'Serene', 'Bright', 'Kind', 'Strong', 'Calm', 'Hopeful'];
+        const nouns = ['Butterfly', 'Owl', 'Star', 'Heart', 'Soul', 'Spirit', 'Light', 'Warrior', 'Phoenix', 'Garden'];
+        
+        const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const noun = nouns[Math.floor(Math.random() * nouns.length)];
+        
+        return `${adj} ${noun}`;
+    }
+
+    generateRandomNickname() {
+        const adjectives = ['Anonymous', 'Silent', 'Mysterious', 'Thoughtful', 'Caring', 'Understanding', 'Supportive', 'Mindful'];
+        const nouns = ['Dove', 'Moon', 'River', 'Mountain', 'Flower', 'Tree', 'Ocean', 'Wind', 'Cloud', 'Dawn'];
+        
+        const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const noun = nouns[Math.floor(Math.random() * nouns.length)];
+        
+        return `${adj} ${noun}`;
+    }
+
+    generateAvatar() {
+        const gradients = [
+            'bg-gradient-to-br from-purple-500 to-pink-600',
+            'bg-gradient-to-br from-blue-500 to-cyan-600',
+            'bg-gradient-to-br from-green-500 to-emerald-600',
+            'bg-gradient-to-br from-orange-500 to-red-600',
+            'bg-gradient-to-br from-indigo-500 to-purple-600',
+            'bg-gradient-to-br from-teal-500 to-blue-600'
+        ];
+        
+        return gradients[Math.floor(Math.random() * gradients.length)];
+    }
+
+    generateRandomAvatar() {
+        return this.generateAvatar();
+    }
+
+    formatTime(date) {
+        const now = new Date();
+        const diff = now - date;
+        
+        if (diff < 60000) return 'Just now';
+        if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+        if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+        return `${Math.floor(diff / 86400000)}d ago`;
+    }
+}
+
+// Enhanced Navigation and Integration
+function enhanceNavigation() {
+    // Add smooth transitions between sections
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById(targetId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('bg-blue-500/20', 'text-blue-300'));
+                link.classList.add('bg-blue-500/20', 'text-blue-300');
+            }
+        });
+    }
+    );
+}
+
+// Mood Integration Helper
+function getMoodContextForAI() {
+    if (typeof moodEntries !== 'undefined' && moodEntries.length > 0) {
+        const recent = moodEntries.slice(0, 3);
+        return recent.map(entry => ({
+            mood: entry.mood,
+            date: entry.date,
+            note: entry.note
+        }));
+    }
+    return null;
+}
+
+// Notification System for Support Features
+class SupportNotifications {
+    static show(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+        
+        const colors = {
+            info: 'bg-blue-500/90 text-white',
+            success: 'bg-green-500/90 text-white',
+            warning: 'bg-yellow-500/90 text-black',
+            error: 'bg-red-500/90 text-white'
+        };
+        
+        notification.classList.add(...colors[type].split(' '));
+        notification.innerHTML = `
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}-circle"></i>
+                <span>${message}</span>
+                <button class="ml-2 hover:opacity-70" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Slide in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+}
+
+// Facial Emotion Recognition System
+class EmotionRecognizer {
+    constructor() {
+        this.video = document.getElementById('video');
+        this.canvas = document.getElementById('canvas');
+        this.startBtn = document.getElementById('start-camera-btn');
+        this.stopBtn = document.getElementById('stop-camera-btn');
+        this.emotionResultEl = document.getElementById('emotion-result');
+        this.stream = null;
+        this.detectionInterval = null;
+        this.modelsLoaded = false;
+        this.init();
+    }
+
+    async init() {
+        await this.loadModels();
+        this.setupEventListeners();
+    }
+
+    async loadModels() {
+        const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights';
+        try {
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+                faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+            ]);
+            this.modelsLoaded = true;
+            console.log("FaceAPI models loaded successfully");
+            this.startBtn.textContent = "Start Camera";
+        } catch (error) {
+            console.error("Error loading FaceAPI models:", error);
+            this.emotionResultEl.textContent = "Error loading models.";
+        }
+    }
+
+    setupEventListeners() {
+        this.startBtn.addEventListener('click', () => this.startVideo());
+        this.stopBtn.addEventListener('click', () => this.stopVideo());
+    }
+
+    async startVideo() {
+        if (!this.modelsLoaded) {
+            this.emotionResultEl.textContent = "Models are still loading...";
+            return;
+        }
+        if (this.stream) return;
+
+        try {
+            this.stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+            this.video.srcObject = this.stream;
+            this.startBtn.disabled = true;
+            this.stopBtn.disabled = false;
+            this.emotionResultEl.textContent = "Starting camera...";
+
+            this.video.addEventListener('play', () => {
+                this.emotionResultEl.textContent = "Detecting...";
+                this.canvas.width = this.video.clientWidth;
+                this.canvas.height = this.video.clientHeight;
+                faceapi.matchDimensions(this.canvas, { width: this.video.clientWidth, height: this.video.clientHeight });
+
+                this.detectionInterval = setInterval(async () => {
+                    const detections = await faceapi.detectSingleFace(this.video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+                    
+                    if (detections) {
+                        const resizedDetections = faceapi.resizeResults(detections, { width: this.video.clientWidth, height: this.video.clientHeight });
+                        this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.processExpressions(resizedDetections.expressions);
+                    } else {
+                        this.emotionResultEl.textContent = "No face detected";
+                    }
+                }, 300);
+            });
+
+        } catch (err) {
+            console.error("Error accessing webcam:", err);
+            this.emotionResultEl.textContent = "Could not access camera.";
+            this.startBtn.disabled = false;
+        }
+    }
+
+    stopVideo() {
+        if (!this.stream) return;
+
+        clearInterval(this.detectionInterval);
+        this.stream.getTracks().forEach(track => track.stop());
+        this.video.srcObject = null;
+        this.stream = null;
+
+        this.startBtn.disabled = false;
+        this.stopBtn.disabled = true;
+        this.emotionResultEl.textContent = "";
+        this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    processExpressions(expressions) {
+        const emotions = Object.entries(expressions).sort((a, b) => b[1] - a[1]);
+        const dominantEmotion = emotions[0][0];
+        const confidence = Math.round(emotions[0][1] * 100);
+
+        this.emotionResultEl.textContent = `Detected: ${dominantEmotion} (${confidence}%)`;
+        this.mapEmotionToMood(dominantEmotion);
+    }
+
+    mapEmotionToMood(emotion) {
+        let moodToSelect = null;
+        switch(emotion) {
+            case 'happy':
+                moodToSelect = 'Radiant';
+                break;
+            case 'neutral':
+                moodToSelect = 'Neutral';
+                break;
+            case 'surprised':
+                 moodToSelect = 'Peaceful';
+                 break;
+            case 'sad':
+                moodToSelect = 'Troubled';
+                break;
+            case 'angry':
+            case 'disgusted':
+            case 'fearful':
+                moodToSelect = 'Heavy';
+                break;
+        }
+
+        if (moodToSelect) {
+            const moodBtn = document.querySelector(`.mood-btn[data-mood="${moodToSelect}"]`);
+            if (moodBtn) {
+                moodBtn.click();
+            }
+        }
+    }
+}
+
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize AI Companion
+    window.aiCompanion = new AICompanion();
+    
+    // Initialize Peer Support
+    window.peerSupport = new PeerSupport();
+    
+    // Initialize Emotion Recognizer when its page is shown
+    const moodTrackerLink = document.querySelector('[href="#mood-tracker"]');
+    const initEmotionRecognizer = () => {
+        if (!window.emotionRecognizer) {
+            window.emotionRecognizer = new EmotionRecognizer();
+        }
+        moodTrackerLink.removeEventListener('click', initEmotionRecognizer);
+    };
+    moodTrackerLink.addEventListener('click', initEmotionRecognizer);
+
+    // Welcome notification
+    setTimeout(() => {
+        SupportNotifications.show('Welcome to your mental wellness support system!', 'success');
+    }, 1000);
+});
+
+// Export for global access
+window.SupportNotifications = SupportNotifications;
+    </script>
+</body>
+</html>
